@@ -15,8 +15,12 @@ RUN apt-get install -y unzip && \
     unzip awscliv2.zip && \
     ./aws/install
 
+# Install dependencies
+RUN apt-get update && apt-get install -y wget unzip
+
 # Install Terraform
 ENV TERRAFORM_VERSION=1.5.2
-RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add - && \
-    apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && \
-    apt-get update && apt-get install terraform=${TERRAFORM_VERSION}
+RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+    mv terraform /usr/local/bin/ && \
+    rm terraform_${TERRAFORM_VERSION}_linux_amd64.zip
